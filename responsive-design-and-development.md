@@ -221,12 +221,12 @@ Eg :
       "mediumView": "width >= 500 && width < 800 ",
       "largeView": "width >= 800 ",
       "customFunction" : function(context) {
-      /**This is the function where we can add our logics
-                  *where as context object holds  the various
- *context values
-                 **/
+          /**This is the function where we can add our logics
+            *where as context object holds  the various
+            *context values
+           **/
       }
-      }
+  }
 ```
       With the above declaration, any `responsiveConfig` can now use these value as below:
 ``` json
