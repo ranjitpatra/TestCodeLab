@@ -215,9 +215,9 @@ Here the ```desktop``` in the responsiveConfig rule is actually came from the "p
 
 Using responsiveFormulas allows you to cut down on this repetition by adding new properties to the "scope" for the rules in a responsiveConfig.
 Eg :
-``` json
+``` javascript
   responsiveFormulas: {
-            "smallView": "width < 500",
+      "smallView": "width < 500",
       "mediumView": "width >= 500 && width < 800 ",
       "largeView": "width >= 800 ",
       "customFunction" : function(context) {
@@ -231,20 +231,18 @@ Eg :
       With the above declaration, any `responsiveConfig` can now use these value as below:
 ``` json
 responsiveConfig: {
-        "smallView": {
-                "hidden": true
-        },
-        "mediumView": {
-                "hidden": false,
-       "region": "north"
+    "smallView": {
+        "hidden": true
+    },
+    "mediumView": {
+        "hidden": false,
+        "region": "north"
 
-   },
-   "largeView": {
-         "hidden": false,
-       "region": "west"
-
-     }
-
+    },
+    "largeView": {
+        "hidden": false,
+        "region": "west"
+    }
 }
 ```
 
