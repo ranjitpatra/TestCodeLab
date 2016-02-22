@@ -255,10 +255,15 @@ In the above example setting the region of a component and visibility based on t
 Before attaching the event first we have to know how responsive feature is working in ExtJs. 
 
 i. We can make a class responsive by adding suitable ```Ext.plugin.Responsive``` plugin or ```Ext.mixin.Responsive``` mixin and the class will gain the responsiveConfig option.
+
 ii. At the time of class instantiation, the instance will be registered to take part in responsive activity. 
+
 iii. When we resize screen size or orientation then it will initiate.
+
 iv. ```Ext.GlobalEvents``` will fire the beforeresponsiveupdate event.
+
 v. ```Ext.GlobalEvents``` will fire the beginresponsiveupdate event and will set the appropriate responsiveConfig by using the ```setConfig()``` method of the instance.
+
 vi. ```Ext.GlobalEvents``` will fire the responsiveupdate event.
 
 We can catch the responsiveupdate event from the Ext.GlobalEvents.
