@@ -266,7 +266,7 @@ v. ```Ext.GlobalEvents``` will fire the beginresponsiveupdate event and will set
 
 vi. ```Ext.GlobalEvents``` will fire the responsiveupdate event.
 
-We can catch the responsiveupdate event from the Ext.GlobalEvents.
+We can catch the responsiveupdate event from the Ext.GlobalEvents and this event will be fired when we change screen size or orientation.
 
 ``` javascript
 Ext.GlobalEvents.on("responsiveupdate", function(context){
