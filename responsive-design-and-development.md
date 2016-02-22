@@ -208,7 +208,7 @@ responsiveConfig: {
   }
 }
 ```
-Here the ```desktop``` in the responsiveConfig rule is actually came from the "platform".
+Here the ```desktop``` in the responsiveConfig rule is actually defined in the "platform" (Ext.platformTags). Ext.platformTags contains boolean properties that describe the current device or platform and these can be used responsiveConfig statements. Please refer ```Ext.platformTags``` for more details.
 
 **10. What is responsiveFormulas :**
  It is common when using responsiveConfig to have recurring expressions that make for complex configurations. 
