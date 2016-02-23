@@ -1,0 +1,344 @@
+Promise
+---------------------------
+
+The Promise object is used for deferred and asynchronus computation. A Promise represents an operation that has not completed yet but expected in Future i.e it represents future value that may not yet available.
+
+Promise natively intoduced in the ECMAScript-6 but before that we have lot of implementations of it like Q, RSVP.js, WinJs, when.js.
+
+A Promise has three states these are
+1. fullfilled : Action releted to promise succeeded
+2. rejected : Action related to promise failed
+3. pending : Has not fullfilled or rejected yet
+
+How to create Promise in ExtJS
+-------------------------------
+
+1. By instantiating Ext.Promise
+
+var promise = new Ext.Promise(function(resolve, reject){
+    
+    if(expression fullfilled){
+        resolve(data);
+    }
+    else{
+        reject(error reason);
+    }
+});
+
+promise.then(
+    function(value){ ... }, //success callback
+    function(error){ ... }, //reject callback
+    function(value){ ... }, //progress callback
+    scope
+);
+
+Here we have created a promise by instantiating Ext.Promise, which will take a callback with resolve and reject arguments. the resolve will fullfill the promise and the reject will fail the promise. After that we can attach our callbacks to promise through the then() method, which will take three callbacks called success, fail and progress callbacks. The success callback will be called when promise is fullfilled, fail callback will be called when promise is failed and the progress will be called for progress updates. The then() will return a promise for promise chaining. Don't worry we will discuss promise chaining in more details in the later stage.
+
+2. By instantiating Ext.Deferred
+
+Deferred are the mechanism used to create new Promise. Deferred has a single promise associated with it which can be returned to external consumer/program to ensure that they will not interfere with the rejection and resolution of deferred program.
+
+function loadEmployees(){
+    var deferred = new Ext.Deferred();
+
+    Ext.Ajax.request({
+        url : url,
+        success : function(response){
+            deferred.resolve(response.responseText);
+        },
+        failure : function(response){
+            deferred.reject(response.status);
+        }
+    });
+    return deferred.promise; //will return the underlying promise of deferred
+}
+
+var promise = loadEmployees();
+
+promise.then(
+    function(value){ ... }, //success callback
+    function(error){ ... }, //reject callback
+    function(value){ ... }, //progress callback
+    scope
+);
+
+The Ext.Promise.all() provides the Parallelism in term of execution
+-------------------------------------------------------------------
+
+This will take array of promises and will return a resulting promise. This will be more useful when we have have a operation which depends on multiple actions i.e let we want to manupulate employee grade which depends on multiple services.
+
+var resultingPromise = Ext.Promise.all([promise1, promise2, promise3,......]);
+
+resultingPromise.then(
+    ...
+);
+
+The Ext.Promise.all() will execute all the argumented promises parallely and the resulting promise will be exexuted on the resolve/reject of all the promises. If all the promises are resolved then it will invoke the resolve/success callback and if any one of these promises is rejected then it will invoke the reject callback of the resulting promise.
+
+This means when we resolve a promise it will decrement the unfullfilled promises count untill it comes to zero. when it will reach to zero then it will invoke the success callback attached for these promises. Here the resolve(), reject() acts like a event to the resulting promise but it is slightly different from the event. let find out the outcomes.
+
+1. A promise can only succeed or fail once. It cannot succeed or fail twice, neither can it switch from success to failure or vice versa.
+
+2. If a promise has succeeded or failed and later we added a success/failure callback, the correct callback will be called, even though the event took place earlier.
+
+3. This is extremely useful for async success/failure, because we're less interested in the exact time something became available, and more interested in reacting to the outcome.
+
+The promise done()
+-------------------
+
+The done() terminates the promise chain and throws unhandled rejections i.e. if have not catched any generated failure then it will ensure that these rejection errors will be thrown.
+
+promise.then(
+    function(value) { ... } // callback
+)
+.done();
+
+The promise always()
+--------------------
+The always() will be invoked whether a promise is succeeds/fails. This is like finally block in try... catch... finally.
+
+promise.then(
+    function() { ... }
+)
+.always(function(){
+    // codes goes here
+    ...
+})
+
+
+Promise chaining through then() will provide sequencing
+-------------------------------------------------------
+
+var promise = new Ext.Promise(function(resolve, reject){
+    resolve(100);
+});
+
+promise.then(function(value){
+    console.log(value); // log 100
+    return value + 100;
+})
+.then(function(value){
+    console.log(value); // will log 200
+})
+
+We saw we can add multiple then() statement to promise and it will create a chaining process where the return of one then() will be the input for the other then() block; and it will help us for transforming data in each step.
+
+We can add multiple then() method and each then() will return a promise with the transformed value and the execution of then() will go sequencially.
+
+Queueing asynchronous Actions
+-----------------------------
+
+we can also chain "then"s to run async actions in sequence. When we return something from a "then" callback, it's a bit tricky. If we return a value, the next "then" is called with that value. However, if we return something promise-like, the next "then" waits on it, and is only called when that promise settles (succeeds/fails). This means a promise waiting for another promise in the process of promise chaining.
+
+function getJSON(url){
+    var deferred = new Ext.Deferred();
+
+    Ext.Ajax.request({
+        url : url,
+        success : function(response){
+            deferred.resolve(Ext.decode(response.responseText)); //it will resolve with the decoded json data
+        },
+        failure : function(response){
+            deferred.reject(response.status);
+        }
+    });
+    return deferred.promise;
+}
+
+The getJSON() will take a json file url and return a promise, we can attach our success/failure callback to the returned promise;
+
+getJSON("topics.json").then(function(topics){
+    // Now we got all the topics;
+    var topicsPromises = [];
+    Ext.each(topics, function(topic){
+        topicsPromises.push(getJSON(topic.url)); //topic.url will return url for each topic
+    });
+    return Ext.Promise.all(topicsPromises); // This will return a resulting promise
+})
+.then(function(topicContents){
+    console.log(topicContents); 
+});
+
+The getJSON(topic.url) will return a promise and we are storing in a array and finally we are creating one promise for these bunch of promises by using the Ext.Promise.all(topicsPromises). As we are returning a promise in the first then() method then the next then() will be queued untill the returning promise is resolved/rejected.
+
+Error Handling in Promise
+-------------------------
+
+1. The then() method of promise is taking two arguments then one will be the success callabck and other is the reject callback. One way is the by using the reject callback we can capture the generated errors. Let's check it.
+
+promise.then(
+    function( value ){ ... }, // success callback
+    function( error ){ // Error callback
+        // Have some error handing codes
+    }
+);
+
+2. the otherwise() method can be used for error handling. it accepts reject callback and returns a new promise of the the transformed value. i.e., a Promise that is resolved with the original resolved value, or resolved with the callback return value or rejected with any error thrown by the callback. 
+
+promise.otherwise(
+    function(value){ ... }, // Rejection callback
+    scope
+)
+
+the otherwise() is not a special, it adds sugar to then(undefined, function(){ ... });
+
+
+Sample Use case
+--------------------------------------
+Lets take some sample example which will load a training module. Let's note down the steps.
+1. show the loading spinner
+2. fetch some json for topics which will give you the topics and the releted url for it.
+3. Add Topic to the page
+4. fetch each topic contents.
+5. add topic to the page
+6. stop the spinner
+
+
+#1. We will cover all the steps one by one. First let start the spinner and it will spin unitill promise is fullfilled/rejected.
+
+#2. Let's create a ajax to load the topics.json;
+
+getJSON("topics.json").then(function(topics){
+    // Now we got all the topics;
+})
+
+#3. After getting all the topics we can create one one controls for each topics and then set the titles.
+
+#4. we will load each topics content. before this let's check the Promise chaining.
+
+getJSON("topics.json").then(function(topics){
+    // Now we got all the topics;
+    var topicsPromises = [];
+    Ext.each(topics, function(topic){
+        topicsPromises.push(getJSON(topic.url)); //topic.url will return url for each topic
+    });
+    return Ext.Promise.all(topicsPromises); // This will return a resulting promise
+})
+.then(function(topicContents){
+    console.log(topicContents); 
+});
+
+The last then() will be queued untill the Ext.Promise.all(topicsPromises) resolved. The async nature of promise will load all the depended contents.
+
+
+#5,6. Let set the content of topics and stop the spinner.
+
+getJSON("topics.json").then(function(topics){
+    // Now we got all the topics;
+    var topicsPromises = [];
+    Ext.each(topics, function(topic){
+        topicsPromises.push(getJSON(topic.url)); //topic.url will return url for each topic
+    });
+    return Ext.Promise.all(topicsPromises); // This will return a resulting promise
+})
+.then(function(topicContents){
+    //  set the content of topics
+})
+.always(function(){
+    //stop the sinnner
+});
+
+The always() will be invoked whether a promise is succeeds/fails. This is like finally block in try... catch... finally.
+
+Advantage of Promise over callback
+----------------------------------
+1. Promises are a replacement for Callbacks to help us deal with composition of multiple async operations.
+2. Promise will make our code more modular and we just have to take care when to resolve and when to reject.
+3. It will provide a efficient way to handle the error. Which we have seen earlier.
+4. The then() method returns another promise and we can return data from the callback to map the value received by the next callback in the chain.
+5. We can attach a event to a callback and the attached callback can listen the event. If the event if fired before we attach the callback then we can not listen/invoke callback. 
+
+But in case of promise if it resolved before we attahed a then() then the coresponding callback will be invoked even though the promise is settled earlier.
+6. In case of callback paradism we have to create a callback heirarchy i.e. which method will be invoked on the success/faliure of parent callback. it will create a invocation hierarchy and also make the code more complex.
+
+Let's take a example of list all the achievements of a employee for the year 2013, 2014, 2015 and from the service we can read achievements for a year. lets code it from the scratch.
+
+
+function getAchievements(year, successCallback, errorCallback){
+
+    Ext.Ajax.request({
+        url : url,
+        params : {year : year},
+        success : function(response){
+            successCallback(JSON.parse(response.responseText));
+        },
+        failure : function(response){
+            errorCallback(response.status);
+        }
+    });
+}
+function handleError(){
+    // handle error
+}
+
+function loadAcheivements(){
+
+    getAchievements(2013, function(data1){
+        getAchievements(2014, function(data2){
+            getAchievements(2015, function(data3){
+
+                var achievements = [].concat(data1, data2, data3);
+                console.log(achievements); // will give a list of all the achievements
+
+            }, handleError);
+        }, handleError);
+    }, handleError);
+}
+
+Here the callback will creare a mess with the business logic if we have a complex requirement.
+
+The Promise representation will make code more simpler to manage and maintain. Let's code it by using promise.
+
+function getAchievements(year){
+    var deferred = new Ext.Deferred();
+    Ext.Ajax.request({
+        url : url,
+        params : {year : year},
+        success : function(response){
+            deferred.resolve(JSON.parse(response.responseText));
+        },
+        failure : function(response){
+            deferred.reject(response.status);
+        }
+    });
+    return deferred.promise; // will return underlying promise
+}
+function handleError(){
+    // handle error
+}
+
+function loadAchievements(){
+    var achievements = [];
+    getAchievements(2013).then(function(data1){
+        achievements = achievements.concat(data1);
+        return getAchievements(2014); //will return a promise so "Queueing asynchronous Actions" will take place
+    })
+    .then(function(data2){
+        achievements = achievements.concat(data2);
+        return getAchievements(2015); //will return a promise so "Queueing asynchronous Actions" will take place
+    })
+    .then(function(data3){
+        achievements = achievements.concat(data3);
+        console.log(achievements);
+    })
+    .otherwise(handleError)
+    .done();
+}
+
+Now see the promise implementation will simplify the code and makes the code more modular. lets make it more simpler by using Ext.Promise.all();
+
+function loadAchievements(){
+    var promises = [getAchievements(2013), getAchievements(2014), getAchievements(2015)];
+    Ext.Promise.all(promises).then(function(values){
+        // the values we be a array
+        //values[0] will be the resolved value of promise 1
+        //values[1] will be the resolved value of promise 2
+        //values[2] will be the resolved value of promise 3
+
+        var achievements = [].concat(values[0], values[1], values[2]);
+        console.log(achievements);
+    })
+    .otherwise(handleError)
+    .done();
+}
+
