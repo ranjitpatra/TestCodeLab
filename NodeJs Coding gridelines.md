@@ -509,21 +509,25 @@ But be careful, because these are all true:
 This means that instead of this:
 
 ```js
-while (x != null) {```
+while (x != null) {
+```
 
 you can write this shorter code (as long as you don't expect x to be 0, or the empty string, or false):
 
 ```js
-while (x) {```
+while (x) {
+```
 
 And if you want to check a string to see if it is null or empty, you could do this:
 
 ```js
-if (y != null && y != '') {```
+if (y != null && y != '') {
+```
 
 But this is shorter and nicer:
 
 ```js
-if (y) {```
+if (y) {
+```
 
 
