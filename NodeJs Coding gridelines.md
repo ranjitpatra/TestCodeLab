@@ -41,8 +41,7 @@ Please go through this and you will get better idea how to write better code.
 ### Miscellaneous
 * [Object.freeze, Object.preventExtensions, Object.seal, with, eval](#objectfreeze-objectpreventextensions-objectseal-with-eval)
 * [Requires At Top](#requires-at-top)
-* [Getters and setters](#getters-and-setters)
-* [Do not extend built-in prototypes](#do-not-extend-built-in-prototypes)
+* [Tips and Tricks](#tips-and-tricks)
 
 ## Formatting
 
@@ -439,7 +438,8 @@ User.findOne({ name: 'foo' }).populate('bar')
 
 Use slashes for both single line and multi line comments. Try to write
 comments that explain higher level mechanisms or clarify difficult
-segments of your code. Don't use comments to restate trivial things.
+segments of your code. use block comments for formal documentation / method documentation.
+before writing please have the complete idea what is the difference between comment and documentation.
 
 *Right:*
 
@@ -488,3 +488,42 @@ Stay away from these kinds of stuffs..
 ### Requires At Top
 
 Always put requires at top of file to clearly illustrate a file's dependencies. Besides giving an overview for others at a quick glance of dependencies and possible memory impact, it allows one to determine if they need a package.json file should they choose to use the file elsewhere.
+
+### Tips and Tricks
+
+*True and False Boolean Expressions*
+
+The following are all false in boolean expressions:
+
+* null
+* undefined
+* '' the empty string
+* 0 the number
+
+But be careful, because these are all true:
+
+* '0' the string
+* [] the empty array
+* {} the empty object
+
+This means that instead of this:
+
+```js
+while (x != null) {```
+
+you can write this shorter code (as long as you don't expect x to be 0, or the empty string, or false):
+
+```js
+while (x) {```
+
+And if you want to check a string to see if it is null or empty, you could do this:
+
+```js
+if (y != null && y != '') {```
+
+But this is shorter and nicer:
+
+```js
+if (y) {```
+
+
