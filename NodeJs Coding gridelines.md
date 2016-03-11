@@ -1,24 +1,12 @@
 # Node.js Style Guide
 
 This is a guide for writing consistent and aesthetically pleasing node.js code.
-It is inspired by what is popular within the community, and flavored with some
-personal opinions.
-
-There is a .jshintrc which enforces these rules as closely as possible. You can
-either use that and adjust it, or use
-[this script](https://gist.github.com/kentcdodds/11293570) to make your own.
-
-This guide was created by [Felix Geisendörfer](http://felixge.de/) and is
-licensed under the [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/)
-license. You are encouraged to fork this repository and make adjustments
-according to your preferences.
-
-![Creative Commons License](http://i.creativecommons.org/l/by-sa/3.0/88x31.png)
+Please go through this and you will get better idea how to write better code.
 
 ## Table of contents
 
 ### Formatting
-* [2 Spaces for indentation](#2-spaces-for-indentation)
+* [4 Spaces for indentation](#4-spaces-for-indentation)
 * [Newlines](#newlines)
 * [No trailing whitespace](#no-trailing-whitespace)
 * [Use Semicolons](#use-semicolons)
@@ -59,10 +47,11 @@ according to your preferences.
 ## Formatting
 
 
-### 2 Spaces for indentation
+### 4 Spaces for indentation
 
-Use 2 spaces for indenting your code and swear an oath to never mix tabs and
-spaces - a special kind of hell is awaiting you otherwise.
+Use 4 spaces for indenting your code and never mix tabs and
+spaces. Tab don't have any standard, in some IDE it will take 4 space and in other will take 8.
+So don't mess code with tab and space and always use 4 space for indentation.
 
 ### Newlines
 
@@ -71,9 +60,7 @@ of a file. Windows-style newlines (`\r\n`) are forbidden inside any repository.
 
 ### No trailing whitespace
 
-Just like you brush your teeth after every meal, you clean up any trailing
-whitespace in your JS files before committing. Otherwise the rotten smell of
-careless neglect will eventually drive away contributors and/or co-workers.
+Clean up any trailing whitespace in your JS files before committing.
 
 ### Use Semicolons
 
@@ -88,8 +75,7 @@ cheap syntactic pleasures.
 ### 80 characters per line
 
 Limit your lines to 80 characters. Yes, screens have gotten much bigger over the
-last few years, but your brain has not. Use the additional room for split screen,
-your editor supports that, right?
+last few years, but our brain has not. JSHINT and JSLINT will give you warning if any line has more than 80 charecters.
 
 ### Use single quotes
 
@@ -115,7 +101,7 @@ Your opening braces go on the same line as the statement.
 
 ```js
 if (true) {
-  console.log('winning');
+    console.log('winning');
 }
 ```
 
@@ -124,7 +110,7 @@ if (true) {
 ```js
 if (true)
 {
-  console.log('losing');
+    console.log('losing');
 }
 ```
 
@@ -287,24 +273,6 @@ if (a == '') {
 
 [comparisonoperators]: https://developer.mozilla.org/en/JavaScript/Reference/Operators/Comparison_Operators
 
-### Use multi-line ternary operator
-
-The ternary operator should not be used on a single line. Split it up into multiple lines instead.
-
-*Right:*
-
-```js
-var foo = (a === b)
-  ? 1
-  : 2;
-```
-
-*Wrong:*
-
-```js
-var foo = (a === b) ? 1 : 2;
-```
-
 ### Use descriptive conditions
 
 Any non-trivial conditions should be assigned to a descriptively named variable or function:
@@ -344,15 +312,13 @@ as possible.
 
 ```js
 function isPercentage(val) {
-  if (val < 0) {
-    return false;
-  }
-
-  if (val > 100) {
-    return false;
-  }
-
-  return true;
+    if (val < 0) {
+        return false;
+    }
+    if (val > 100) {
+        return false;
+    }
+    return true;
 }
 ```
 
@@ -360,15 +326,15 @@ function isPercentage(val) {
 
 ```js
 function isPercentage(val) {
-  if (val >= 0) {
-    if (val < 100) {
-      return true;
+    if (val >= 0) {
+        if (val < 100) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
-      return false;
+        return false;
     }
-  } else {
-    return false;
-  }
 }
 ```
 
@@ -377,8 +343,8 @@ further:
 
 ```js
 function isPercentage(val) {
-  var isInRange = (val >= 0 && val <= 100);
-  return isInRange;
+    var isInRange = (val >= 0 && val <= 100);
+    return isInRange;
 }
 ```
 
@@ -391,7 +357,7 @@ will produce better stack traces, heap and cpu profiles.
 
 ```js
 req.on('end', function onEnd() {
-  console.log('winning');
+    console.log('winning');
 });
 ```
 
@@ -399,23 +365,23 @@ req.on('end', function onEnd() {
 
 ```js
 req.on('end', function() {
-  console.log('losing');
+    console.log('losing');
 });
 ```
 
 ### No nested closures
 
-Use closures, but don't nest them. Otherwise your code will become a mess.
+Use closures, but don't nest them. Otherwise code will become a mess.
 
 *Right:*
 
 ```js
 setTimeout(function() {
-  client.connect(afterConnect);
+    client.connect(afterConnect);
 }, 1000);
 
 function afterConnect() {
-  console.log('winning');
+    console.log('winning');
 }
 ```
 
@@ -423,12 +389,11 @@ function afterConnect() {
 
 ```js
 setTimeout(function() {
-  client.connect(function() {
-    console.log('losing');
-  });
+    client.connect(function() {
+        console.log('losing');
+    });
 }, 1000);
 ```
-
 
 ### Method chaining
 
@@ -439,8 +404,7 @@ You should also indent these methods so it's easier to tell they are part of the
 *Right:*
 
 ```js
-User
-  .findOne({ name: 'foo' })
+User.findOne({ name: 'foo' })
   .populate('bar')
   .exec(function(err, user) {
     return true;
@@ -457,11 +421,6 @@ User
   return true;
 });
 
-User.findOne({ name: 'foo' })
-  .populate('bar')
-  .exec(function(err, user) {
-    return true;
-  });
 
 User.findOne({ name: 'foo' }).populate('bar')
 .exec(function(err, user) {
@@ -524,45 +483,8 @@ if (isSessionValid) {
 
 ### Object.freeze, Object.preventExtensions, Object.seal, with, eval
 
-Crazy shit that you will probably never need. Stay away from it.
+Stay away from these kinds of stuffs..
 
 ### Requires At Top
 
 Always put requires at top of file to clearly illustrate a file's dependencies. Besides giving an overview for others at a quick glance of dependencies and possible memory impact, it allows one to determine if they need a package.json file should they choose to use the file elsewhere.
-
-### Getters and setters
-
-Do not use setters, they cause more problems for people who try to use your
-software than they can solve.
-
-Feel free to use getters that are free from [side effects][sideeffect], like
-providing a length property for a collection class.
-
-[sideeffect]: http://en.wikipedia.org/wiki/Side_effect_(computer_science)
-
-### Do not extend built-in prototypes
-
-Do not extend the prototype of native JavaScript objects. Your future self will
-be forever grateful.
-
-*Right:*
-
-```js
-var a = [];
-if (!a.length) {
-  console.log('winning');
-}
-```
-
-*Wrong:*
-
-```js
-Array.prototype.empty = function() {
-  return !this.length;
-}
-
-var a = [];
-if (a.empty()) {
-  console.log('losing');
-}
-```
