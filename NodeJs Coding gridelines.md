@@ -547,3 +547,58 @@ you can write this:
 ```js
 return val ? foo() : bar();
 ```
+*&& and ||*
+
+These binary boolean operators are short-circuited, and evaluate to the last evaluated term.
+
+"||" has been called the 'default' operator, because instead of writing this:
+
+```js
+function foo(opt_win) {
+  var win;
+  if (opt_win) {
+    win = opt_win;
+  } else {
+    win = window;
+  }
+  // ...
+}
+```
+
+you can write this:
+
+```js
+function foo(opt_win) {
+  var win = opt_win || window;
+  // ...
+}
+```js
+
+"&&" is also useful for shortening code. For instance, instead of this:
+
+```js
+if (node) {
+  if (node.kids) {
+    if (node.kids[index]) {
+      foo(node.kids[index]);
+    }
+  }
+}
+```
+
+you could do this:
+
+```js
+if (node && node.kids && node.kids[index]) {
+  foo(node.kids[index]);
+}
+```
+
+or this:
+
+```js
+var kid = node && node.kids && node.kids[index];
+if (kid) {
+  foo(kid);
+}
+```
