@@ -42,6 +42,7 @@ Please go through this and you will get better idea how to write better code.
 * [Object.freeze, Object.preventExtensions, Object.seal, with, eval](#objectfreeze-objectpreventextensions-objectseal-with-eval)
 * [Requires At Top](#requires-at-top)
 * [Tips and Tricks](#tips-and-tricks)
+* [Further Reading](#further-reading)
 
 ## Formatting
 
@@ -572,7 +573,7 @@ function foo(opt_win) {
   var win = opt_win || window;
   // ...
 }
-```js
+```
 
 "&&" is also useful for shortening code. For instance, instead of this:
 
@@ -602,3 +603,8 @@ if (kid) {
   foo(kid);
 }
 ```
+
+### Further Reading
+
+[Best Practices part1](https://blog.risingstack.com/node-js-best-practices/)
+[Best Practices part2](https://blog.risingstack.com/node-js-best-practices-part-2/)
