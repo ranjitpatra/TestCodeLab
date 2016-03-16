@@ -530,4 +530,20 @@ But this is shorter and nicer:
 if (y) {
 ```
 
+*Conditional (Ternary) Operator (?:)*
 
+Instead of this:
+
+```js
+if (val) {
+  return foo();
+} else {
+  return bar();
+}
+```
+
+you can write this:
+
+```js
+return val ? foo() : bar();
+```
