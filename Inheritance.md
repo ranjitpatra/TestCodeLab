@@ -96,7 +96,7 @@ Cat.superclass = Mamal.prototype;				 // We are keeping the reference of parents
 
 //The code snippet for calling superclass haveABaby()
 Cat.prototype.haveABaby = function(){ 
-	this.superclass.haveABaby.call(this);
+	this.constructor.superclass.haveABaby.call(this);
 }
 ```
 
