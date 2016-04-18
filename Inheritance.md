@@ -76,8 +76,10 @@ Cat.prototype = inherit(Mamal.prototype); // Here the inheritance will occurs.
 
 Following are the steps for the inheritance : 
 
-1. Inherit using ChildClass.prototype = new ParentClass();
-2. Reset the constructor property for the child class using ChildClass.prototype.constructor = ChildClass.
+1. Inherit using ```ChildClass.prototype = new ParentClass();```
+    or ```ChildClass.prototype = Object.create(ParentClass.prototype);```
+    
+2. Reset the constructor property for the child class using ```ChildClass.prototype.constructor = ChildClass.```
 
 ## How to call parent class properties from the child class ?
 
