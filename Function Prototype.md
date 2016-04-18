@@ -124,3 +124,9 @@ array.inArray("grape"); // will return false
 ```
 
 While augmenting build-in type, make a check whether this functionality is present in the prototype or not. let's implement it.
+
+if(!Array.prototype.inArray){ // Checking whether inArray is available in Array.prototype or not.
+	Array.prototype.inArray = function(value){
+	    return this.indexOf(value) === -1 ? false : true;
+	}
+}
