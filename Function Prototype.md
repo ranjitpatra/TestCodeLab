@@ -48,16 +48,16 @@ var person = {
 }
 
 // creates a new object which prototype is person
-var kanchan = Object.create(person);
+var tom = Object.create(person);
   
-console.log(kanchan.kind); // => ‘person’
+console.log(tom.kind); // => ‘person’
 ```
 
 We can pass an object to Object.create to add specific properties for a new object.
 
 ```javascript
-var kanchan = Object.create(person, {age: {value:  30} });
-console.log(kanchan.age); // => ‘30’
+var tom = Object.create(person, {age: {value:  30} });
+console.log(tom.age); // => ‘30’
 ```
 
 We can add more properties with a better and managed way. to know more please refer "https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/create";
@@ -75,8 +75,8 @@ function Person(firstName, lastName) {
     }
 }
 
-var kanchan = new Person("Kanchan", Singh);
-kanchan.say(); // Hi I am Knachan Singh
+var tom = new Person("Tom", Singh);
+tom.say(); // Hi I am Tom Singh
 ```
 
 Here the firstName, lastName and say() binded to the instance object by using this keyword. so we can access the properties or methods from the instance.
@@ -99,8 +99,8 @@ Person.prototype.say = function(){
 	return "Hi I am " + this.firstName + " " + this.lastName;
 }
 
-var kanchan = new Person("Kanchan", Singh);
-kanchan.say(); // Hi I am Knachan Singh
+var tom = new Person("Tom", "Singh");
+tom.say(); // Hi I am Tom Singh
 ```
 
 Person.prototype is a shared scope for all the instances of the class Person. So the function Person.prototype.say() will be created once and accessible with all the Person instances.

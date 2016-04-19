@@ -36,7 +36,7 @@ function Mammal(name){
 } 
 
 Mammal.prototype.haveABaby = function(){ 
-	var newBaby = new Mammal("Baby "+this.name);
+	var newBaby = new this.constructor("Baby "+this.name);
 	this.offspring.push(newBaby);
 	return newBaby;
 } 
@@ -47,10 +47,10 @@ Mammal.prototype.toString=function(){
 
 
 function Cat(name){ 
-	this.name = name;
+	Mammal.apply(this, arguments);
 } 
 
-Cat.prototype = Object.create(Mamal.prototype);  // Here's where the inheritance occurs 
+Cat.prototype = Object.create(Mammal.prototype);  // Here's where the inheritance occurs 
 Cat.prototype.constructor = Cat;                 // Otherwise instances of Cat would have a constructor of Mammal 
 
 Cat.prototype.toString = function(){ 
@@ -95,7 +95,6 @@ In JavaScript there is no such keywords to call parents but we can add some func
 Cat.prototype = Object.create(Mamal.prototype);  // Here's where the inheritance occurs 
 Cat.prototype.constructor = Cat;       			 // Otherwise instances of Cat would have a constructor of Mammal
 Cat.superclass = Mamal.prototype;				 // We are keeping the reference of parents prototype in the child
-
 
 //The code snippet for calling superclass haveABaby()
 Cat.prototype.haveABaby = function(){ 
