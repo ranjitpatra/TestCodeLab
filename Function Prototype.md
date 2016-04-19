@@ -32,6 +32,7 @@ Every object in JavaScript has a prototype. When a message reaches an object, Ja
 ## How can we create prototype?
 
 Javascript providing three way's to create prototype.
+
 1. Object.create
 
 2. Constructor function
