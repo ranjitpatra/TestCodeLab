@@ -45,11 +45,14 @@ Mammal.prototype.toString=function(){
 }
 
 
-Cat.prototype = Object.create(Mamal.prototype);  // Here's where the inheritance occurs 
-Cat.prototype.constructor = Cat;       			 // Otherwise instances of Cat would have a constructor of Mammal 
+
 function Cat(name){ 
 	this.name = name;
 } 
+
+Cat.prototype = Object.create(Mamal.prototype);  // Here's where the inheritance occurs 
+Cat.prototype.constructor = Cat;                 // Otherwise instances of Cat would have a constructor of Mammal 
+
 Cat.prototype.toString = function(){ 
 	return '[Cat "'+this.name+'"]';
 }
